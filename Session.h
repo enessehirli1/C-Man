@@ -6,33 +6,25 @@
 class Session
 {
 private:
-	std::string m_randomWord{};
-	std::vector<char> m_guessedLetters{};
-	int m_lives{ 10 };
+	std::string m_word{};
+	std::vector<char> m_guesses{};
+	std::vector<char> m_wrongGuesses{};
+	int m_lives{ 9 };
 
 public:
-	Session(std::string_view randomWord)
-		: m_randomWord{ randomWord } {}
+	Session(std::string_view word)
+		    : m_word{ word } {}
 
-
-	
-
-	std::vector<char> getGuessedLetters() const { return m_guessedLetters; }	
-	std::string_view getRandomWord() const { return m_randomWord; }
+	std::string_view getWord() const { return m_word; }
+	std::vector<char> getGuesses() const { return m_guesses; }
+	std::vector<char> getWrongGuesses() const { return m_wrongGuesses; };
 	int getLives() const { return m_lives; }
 
-	void pushGuessedLetter(char letter);
-	void draw();
-
-	bool isLetterInWord(char c) const
-	{
-		for (auto ch : m_randomWord) // step through each letter of word
-		{
-			if (ch == c)
-				return true;
-		}
-
-		return false;
+	void pushGuesses(char c);
+	void pushWrongGuesses(char c) {m_wrongGuesses.push_back(c);
 	}
-
+	void decrementLives() 
+	{
+		m_lives -= 1;
+	}
 };

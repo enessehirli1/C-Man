@@ -7,284 +7,152 @@
 
 namespace WordList
 {
-	std::vector<std::string_view> words{ "mystery", "broccoli", "account", "almost", "spaghetti",
-										"opinion", "beautiful", "luggage"};
+	std::vector<std::string_view> words{ "cut", "car", "zeplin", "fault", "breakfast", "pizza" };
 
 	std::string_view getRandomWord()
 	{
-		return words[static_cast<std::size_t>(Random::get(0, static_cast<int>(std::ssize(words) - 1)))];
+		assert(!words.empty());
+		return words[static_cast<size_t>(Random::get(0, static_cast<int>(std::ssize(words) -1)))];
 	}
 }
 
-char getChar()
+char getValidChar()
 {
-    while (true)
-    {
-        std::cout << "Enter your next letter: ";
-
-        char c{};
-        std::cin >> c;
-
-        if (!std::cin)
-        {
-            // Fix it
-            std::cin.clear();
-            std::cout << "That wasn't a valid input.  Try again.\n";
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            continue;
-        }
-
-        // Clear out any extraneous input
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-        // If the user entered an invalid char, try again
-		if (c >= 'A' && c <= 'Z')
-		{
-			return static_cast<char>(c + 32); // Convert to lowercase
-		}
-        if (c < 'a' || c > 'z')
-        {
-            std::cout << "That wasn't a valid input.  Try again.\n";
-            continue;
-        }
-
-        return c;
-    }
-}
-
-
-bool checkWin(std::string_view word, const std::vector<char>& ch)
-{
-	// Önce tahmin edilen harflerin sayısını kontrol edelim
-	if (ch.empty())
-		return 0;
-
-	bool wordFound{ true };
-
-	// Her harf için kontrol yapalım
-	for (const auto& letter : word)
+	char c{};
+	while (true)
 	{
-		bool letterFound{ false };
-		// Tahmin edilen harfler arasında var mı diye bakalım
-		for (const auto& guess : ch)
-		{
-			if (letter == guess)
-			{
-				letterFound = true;
-				break;
-			}
-		}
-
-		if (!letterFound)
-		{
-			wordFound = false;
-			break;
-		}
-	}
-
-	if (wordFound)
-	{
-		std::cout << "You win! The word was: " << word << '\n';
-		return true;
-	}
-
-	return false;
-}
-
-
-
-int main()
-{
-	bool control{ false };
-	std::cout << "Welcome to C++man (a variant of Hangman)\n";
-	std::cout << "To win: guess the word.  To lose: run out of pluses.\n";
-	Session session{WordList::getRandomWord()};
-	session.draw();
-	while (session.getLives() > 0)
-	{
-		char letter{ getChar() };
-		session.pushGuessedLetter(letter);
-		session.draw();
-		if (checkWin(session.getRandomWord(), session.getGuessedLetters()))
-		{
-			control = true;
-			break;
-		}
-
-	}
-
-	if (!control)
-	{
-		std::cout << "You lose! The word was: " << session.getRandomWord() << '\n';
-	}
-
-
-	return 0;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-namespace Game
-{
-	enum Items
-	{
-		healthPotions,
-		torchs,
-		arrows,
-
-		MAX_ITEMS
-	};
-
-	std::vector<int> numItems{ 1, 5, 10 };
-}
-
-int printTotal(const std::vector<int>& arr)
-{
-	int total{ 0 };
-	for (const auto& i : arr)
-		total += i;
-
-	return total;
-}
-
-std::string_view getItemName(Game::Items item)
-{
-	switch (item)
-	{
-	case (Game::healthPotions): return "Health Potions";
-	case (Game::torchs):	    return "Torchs";
-	case (Game::arrows):		return "Arrows";
-	default:					return "Unknown Item";
-	}
-}
-
-void printInventory(const std::vector<int> arr, bool total = false)
-{
-	for (size_t i{ 0 }; i < arr.size(); i++)
-	{
-		std::cout << "You have " << arr[i] << " " << getItemName(static_cast<Game::Items>(i)) << '\n';
-	}
-
-	if (total)
-	{
-		std::cout << "You have total " << printTotal(arr) << " items\n";
-	}
-}
-
-
-int main()
-{
-	assert(Game::MAX_ITEMS == std::ssize(Game::numItems) && "The length of num items and max items must be same");
-
-	printInventory(Game::numItems, true);
-}
-
-template<typename T>
-std::pair<std::size_t, std::size_t> findMinMaxPair(const std::vector<T>& arr)
-{
-	std::size_t size{ arr.size() };
-
-	std::size_t minIndex{ 0 };
-	std::size_t maxIndex{ 0 };
-
-	for (std::size_t index {1}; index < size; index++)
-	{
-		if (arr[index] < arr[minIndex])
-			minIndex = index;
-		if (arr[index] > arr[maxIndex])
-			maxIndex = index;
-	}
-
-	return { minIndex, maxIndex };
-}
-
-
-template <typename T>
-void printArray(const std::vector<T>& vec)
-{
-	bool comma{ false };
-
-	std::cout << "With Array ( ";
-	for (const auto& i : vec)
-	{
-		if (comma)
-			std::cout << ", ";
-
-		std::cout << i;
-		comma = true;
-	}
-
-	std::cout << " ):\n";
-}
-
-template <typename T>
-std::vector<T> getVector()
-{
-	std::vector<T> vec{};
-
-
-	std::cout << "Enter numbers to add (use -1 to stop): ";
-	do
-	{
-		T input{};
-		std::cin >> input;
-
-		if (input == -1)
-			break;
+		std::cout << "Enter your next guess: ";
+		std::cin >> c;
 
 		if (!std::cin)
 		{
 			std::cin.clear();
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			// clear the error state
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // discard invalid input
 			continue;
 		}
 
-		vec.push_back(input);
-	} while (true);
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-	return vec;
+		if (std::isalpha(c))
+		{
+			return static_cast<char>(std::tolower(c));
+		}
+		else
+		{
+			std::cout << "Please enter a valid letter.\n";
+		}
+	}
 }
+
+void printLefted(Session& game)
+{
+	const static int lives{ game.getLives() };
+	for (int index{0}; index < lives - std::ssize(game.getWrongGuesses()); index++)
+	{
+		std::cout << "+";
+	}
+
+	for (const auto& e : game.getWrongGuesses())
+	{
+		std::cout << e;
+	}
+}
+
+void draw(Session& game)
+{
+	std::cout << "The word is: ";
+	for (const auto& c : game.getWord())
+	{
+		bool found{ false };
+		for (size_t index{0}; index < game.getGuesses().size(); index++)
+		{
+			if (c == game.getGuesses()[index])
+			{
+				found = true;
+				std::cout << c;
+			}
+		}
+		if (!found)
+			std::cout << '_';
+	}
+
+	std::cout << "   | Lives left: " ; //game.getLives()
+	printLefted(game);
+	std::cout << '\n';
+}
+
+void checkWin(const Session& game)
+{
+	bool won{ true };
+	for (const auto& e: game.getWord())
+	{
+		bool found{ false };
+		for (const auto& c : game.getGuesses())
+		{
+			if (e == c)
+			{
+				found = true;
+				break;
+			}
+		}
+		if (!found)
+		{
+			won = false;
+			break;
+		}
+	}
+
+
+	if (won)
+	{
+		std::cout << "Congratulations! You guessed the word: " << game.getWord() << "\n";
+		exit(0);
+	}
+	else if (game.getLives() <= 0)
+	{
+		std::cout << "Game over! The word was: " << game.getWord() << "\n";
+		exit(0);
+	}
+}
+
+void playGame(Session& game)
+{
+	std::cout << "Welcome to Hangman in C++\n";
+	std::cout << "The word is " << game.getWord() << "\n";
+
+
+	while (game.getLives())
+	{
+		draw(game);
+		char input{ getValidChar() };
+		bool notFound{ false };
+		for (const auto e : game.getWord())
+		{
+			if (input == e)
+			{
+				notFound = true;
+				break;
+			}
+		}
+		if (!notFound)
+		{
+			game.decrementLives();
+			game.pushWrongGuesses(input);
+		}
+		game.pushGuesses(input);
+		checkWin(game);
+	}
+}
+
+
 
 
 int main()
 {
-	std::vector v1{ getVector<int>()};
-	printArray(v1);
+	Session game{ WordList::getRandomWord() };
+	playGame(game);
 
-	auto m1{ findMinMaxPair(v1) };
-	std::cout << "The min element has index " << m1.first << " and value " << v1[m1.first] << '\n';
-	std::cout << "The max element has index " << m1.second << " and value " << v1[m1.second] << '\n';
-
-	std::cout << '\n';
-
-	std::vector v2{getVector<double>()};
-	printArray(v2);
-
-	auto m2{ findMinMaxPair(v2) };
-	std::cout << "The min element has index " << m2.first << " and value " << v2[m2.first] << '\n';
-	std::cout << "The max element has index " << m2.second << " and value " << v2[m2.second] << '\n';
-
-
+	
 	return 0;
 }
-
-*/
