@@ -21,10 +21,7 @@ public:
 	int getLives() const { return m_lives; }
 
 	void pushGuesses(char c);
-	void pushWrongGuesses(char c) {m_wrongGuesses.push_back(c);
-	}
-	void decrementLives() 
-	{
-		m_lives -= 1;
-	}
+
+	void pushWrongGuesses(char c) {m_wrongGuesses.push_back(c);}
+	void decrementLives() {m_lives -= 1;}
 };

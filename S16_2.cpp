@@ -7,7 +7,7 @@
 
 namespace WordList
 {
-	std::vector<std::string_view> words{ "cut", "car", "zeplin", "fault", "breakfast", "pizza" };
+	std::vector<std::string_view> words{ "school", "car", "zeplin", "fault", "breakfast", "pizza" };
 
 	std::string_view getRandomWord()
 	{
@@ -74,7 +74,10 @@ void draw(Session& game)
 			}
 		}
 		if (!found)
+		{
 			std::cout << '_';
+		}
+			
 	}
 
 	std::cout << "   | Lives left: " ; //game.getLives()
@@ -103,7 +106,6 @@ void checkWin(const Session& game)
 		}
 	}
 
-
 	if (won)
 	{
 		std::cout << "Congratulations! You guessed the word: " << game.getWord() << "\n";
@@ -119,8 +121,6 @@ void checkWin(const Session& game)
 void playGame(Session& game)
 {
 	std::cout << "Welcome to Hangman in C++\n";
-	std::cout << "The word is " << game.getWord() << "\n";
-
 
 	while (game.getLives())
 	{
@@ -144,8 +144,6 @@ void playGame(Session& game)
 		checkWin(game);
 	}
 }
-
-
 
 
 int main()
